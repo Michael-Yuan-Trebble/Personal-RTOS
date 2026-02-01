@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef TASK_H
 #define TASK_H
 
@@ -19,5 +17,29 @@ typedef struct {
 	uint8_t priority;
 	task_state_t state;
 } rtos_task_t;
+
+void task_init(
+	rtos_task_t* task,
+	void (*fn)(void*),
+	void* arg,
+	uint32_t period_ms,
+	uint8_t priority
+);
+
+void set_task_block(rtos_task_t* task);
+
+void set_task_ready(rtos_task_t* task);
+
+void task_set_next_release(rtos_task_t* task, uint32_t now);
+
+int task_is_ready(const rtos_task_t* task, uint32_t now);
+
+void task_delay(rtos_task_t* task, uint32_t delay_ms, uint32_t now);
+
+void task_mark_start(rtos_task_t* task, uint32_t now);
+
+void task_mark_end(rtos_task_t* task, uint32_t now);
+
+int task_deadline_missed(const rtos_task_t* task, uint32_t now);
 
 #endif

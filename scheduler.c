@@ -1,6 +1,14 @@
 #include "scheduler.h"
 #include <time.h>
+#include <stdio.h>
 #include "time.h"
+
+#define MAX_TASKS 16
+
+// Currently Static, check actual RTOS implementation if it remains static or is dynamic
+rtos_task_t tasks[MAX_TASKS];
+bool tasks_ready[MAX_TASKS] = { 0 };
+int task_count = 0;
 
 // Add task to the first index that is available, return true if can
 bool add_task(rtos_task_t t) 
@@ -20,7 +28,7 @@ bool add_task(rtos_task_t t)
 void remove_task(int index) { tasks_ready[index] = false; }
 
 // Main loop running all the tasks
-void schedule() 
+void schedule()
 {
 	uint32_t time = get_system_time_ms();
 	rtos_task_t* execute = NULL;
@@ -29,9 +37,11 @@ void schedule()
 		if (!tasks_ready[i]) continue;
 		if (tasks[i].state != TASK_READY) continue;
 		if (get_system_time_ms() < tasks[i].next_release) continue;
-		if (!execute) execute = &tasks[i];
-		else execute = tasks[i].priority > execute->priority ? &tasks[i].priority : execute->priority;
-		execute->next_release += execute->period_ms;
+		if (execute == NULL) execute = &tasks[i];
+		else execute = tasks[i].priority > execute->priority ? &tasks[i] : execute;
 	}
-	if (execute) execute->task_fn(execute->arg);
+	if (execute != NULL) {
+		execute->task_fn(execute->arg);
+		task_set_next_release(execute, time);
+	}
 }
