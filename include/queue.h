@@ -2,8 +2,8 @@
 #define QUEUE_H
 
 #include <stdint.h>
-#include "tasks.h"
 #include <stdbool.h>
+#include "tasks.h"
 
 typedef struct {
 	uint8_t* buffer;

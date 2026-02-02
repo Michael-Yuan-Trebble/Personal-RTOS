@@ -5,6 +5,8 @@
 #include <stdbool.h>
 #include "tasks.h"
 
+bool scheduler_init(void);
+
 bool add_task(rtos_task_t t);
 void remove_task(int index);
 

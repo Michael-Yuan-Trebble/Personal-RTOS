@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "scheduler.h"
+#include "include/scheduler.h"
 #include <stdbool.h>
 #include <windows.h>
 
 volatile bool rtos_running = true;
 
-DWORD WINAPI rtos_thread(LPVOID arg) {
+static DWORD WINAPI rtos_thread(LPVOID arg) {
 	while (rtos_running) {
 		schedule();
 		Sleep(100);
@@ -14,7 +14,7 @@ DWORD WINAPI rtos_thread(LPVOID arg) {
 	return 0;
 }
 
-DWORD WINAPI cancel_thread(LPVOID arg) {
+static DWORD WINAPI cancel_thread(LPVOID arg) {
 	char buffer[128];
 	printf("Type to Cancel: ");
 	fgets(buffer, sizeof(buffer), stdin);
@@ -23,6 +23,7 @@ DWORD WINAPI cancel_thread(LPVOID arg) {
 }
 
 int main(void) {
+	if (!scheduler_init()) return 1;
 	HANDLE hRTOS = CreateThread(NULL, 0, rtos_thread, NULL, 0, NULL);
 	HANDLE hInput = CreateThread(NULL, 0, cancel_thread, NULL, 0, NULL);
 

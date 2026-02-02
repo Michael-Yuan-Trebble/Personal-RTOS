@@ -3,7 +3,8 @@
 
 #include <stdint.h>
 
-uint32_t get_system_time_ms(void);
+uint64_t get_system_time_ms(void);
 void delay_ms(uint32_t ms);
+void init_time(void);
 
 #endif

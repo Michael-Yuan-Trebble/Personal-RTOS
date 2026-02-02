@@ -1,4 +1,4 @@
-#include "queue.h"
+#include "../include/queue.h"
 #include <string.h>
 
 bool queue_send(queue* q, const void* item, uint32_t timeout_ms, uint32_t now) 

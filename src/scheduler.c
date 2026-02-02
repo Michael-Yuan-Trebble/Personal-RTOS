@@ -1,7 +1,8 @@
-#include "scheduler.h"
+#include "../include/scheduler.h"
 #include <time.h>
 #include <stdio.h>
 #include "time.h"
+#include "../include/cpu.h"
 
 #define MAX_TASKS 16
 
@@ -9,6 +10,11 @@
 rtos_task_t tasks[MAX_TASKS];
 bool tasks_ready[MAX_TASKS] = { 0 };
 int task_count = 0;
+
+bool scheduler_init(void) {
+	init_time();
+	return true;
+}
 
 // Add task to the first index that is available, return true if can
 bool add_task(rtos_task_t t) 
@@ -30,6 +36,8 @@ void remove_task(int index) { tasks_ready[index] = false; }
 // Main loop running all the tasks
 void schedule()
 {
+	uint32_t now = get_system_time_ms();
+	printf("now: %lu\n", now);
 	uint32_t time = get_system_time_ms();
 	rtos_task_t* execute = NULL;
 	for (int i = 0; i < task_count; i++) 

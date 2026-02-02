@@ -2,12 +2,7 @@
 #define TASK_H
 
 #include <stdint.h>
-
-typedef enum {
-	TASK_READY,
-	TASK_RUNNING,
-	TASK_BLOCKED
-} task_state_t;
+#include "rtos_types.h"
 
 typedef struct {
 	void (*task_fn)(void*);

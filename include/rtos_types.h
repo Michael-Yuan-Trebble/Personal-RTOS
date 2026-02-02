@@ -8,9 +8,9 @@ typedef enum {
 } flags_t;
 
 typedef enum {
-	ready,
-	blocked,
-	run
-} state_t;
+	TASK_READY,
+	TASK_RUNNING,
+	TASK_BLOCKED
+} task_state_t;
 
 #endif
