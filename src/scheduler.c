@@ -33,23 +33,31 @@ bool add_task(rtos_task_t t)
 
 void remove_task(int index) { tasks_ready[index] = false; }
 
+rtos_task_t* pick_next_task(void) {
+	rtos_task_t* next = NULL;
+	for (int i = 0; i < task_count; i++) {
+		if (!tasks_ready[i]) continue;
+		if (tasks[i].state != TASK_READY) continue;
+		if (get_system_time_ms() < tasks[i].next_release) continue;
+
+		if (!next || tasks[i].priority > next->priority) next = &tasks[i];
+	}
+	return next;
+}
+
 // Main loop running all the tasks
 void schedule()
 {
 	uint32_t now = get_system_time_ms();
 	printf("now: %lu\n", now);
 	uint32_t time = get_system_time_ms();
-	rtos_task_t* execute = NULL;
-	for (int i = 0; i < task_count; i++) 
-	{
-		if (!tasks_ready[i]) continue;
-		if (tasks[i].state != TASK_READY) continue;
-		if (get_system_time_ms() < tasks[i].next_release) continue;
-		if (execute == NULL) execute = &tasks[i];
-		else execute = tasks[i].priority > execute->priority ? &tasks[i] : execute;
-	}
+	rtos_task_t* execute = pick_next_task();
+
 	if (execute != NULL) {
 		execute->task_fn(execute->arg);
 		task_set_next_release(execute, time);
+	}
+	else {
+		cpu_halt();
 	}
 }

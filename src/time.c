@@ -36,6 +36,6 @@ uint64_t get_system_time_ms(void)
 
 void delay_ms(uint32_t ms) 
 {
-	clock_t start = clock();
-	while ((uint32_t)((clock() - start) * UNIT / CLOCKS_PER_SEC) < ms);
+	uint32_t start = (uint32_t)get_system_time_ms();
+	while ((uint32_t)(((uint32_t)get_system_time_ms() - start) * UNIT / CLOCKS_PER_SEC) < ms);
 }

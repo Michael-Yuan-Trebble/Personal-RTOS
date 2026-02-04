@@ -51,6 +51,7 @@ asm_mfence ENDP
 
 ; Halt CPU
 asm_halt PROC
+	sti
 	hlt
 	ret
 asm_halt ENDP

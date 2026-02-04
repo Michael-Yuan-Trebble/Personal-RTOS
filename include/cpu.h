@@ -9,7 +9,7 @@ extern "C" {
 
 uint64_t cpu_read_tsc(void);
 uint64_t cpu_get_sp(void);
-void cpu_pause(void);
+void cpu_halt(void);
 
 #ifdef __cplusplus
 }

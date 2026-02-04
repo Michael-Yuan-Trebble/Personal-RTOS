@@ -11,5 +11,6 @@ bool add_task(rtos_task_t t);
 void remove_task(int index);
 
 void schedule();
+rtos_task_t* pick_next_task(void);
 
 #endif

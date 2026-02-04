@@ -2,7 +2,7 @@
 
 extern uint64_t asm_read_tsc(void);
 extern uint64_t asm_get_sp(void);
-extern void asm_pause(void);
+extern void asm_halt(void);
 
 uint64_t cpu_read_tsc(void) {
 	return asm_read_tsc();
@@ -12,6 +12,6 @@ uint64_t cpu_get_sp(void) {
 	return asm_get_sp();
 }
 
-void cpu_pause(void) {
-	asm_pause();
+void cpu_halt(void) {
+	asm_halt();
 }
