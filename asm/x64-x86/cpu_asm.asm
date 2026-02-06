@@ -49,7 +49,7 @@ asm_mfence PROC
 	ret
 asm_mfence ENDP
 
-; Halt CPU
+; Halt CPU, current testing device doesn't have right kernel level so disregard now
 asm_halt PROC
 	sti
 	hlt

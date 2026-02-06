@@ -10,6 +10,7 @@ typedef struct {
 	uint32_t period_ms;
 	uint32_t next_release;
 	uint8_t priority;
+	uint8_t base_priority;
 	task_state_t state;
 } rtos_task_t;
 
@@ -24,6 +25,10 @@ void task_init(
 void set_task_block(rtos_task_t* task);
 
 void set_task_ready(rtos_task_t* task);
+
+void set_task_block_forever(rtos_task_t* task);
+
+void task_unblock(rtos_task_t* task);
 
 void task_set_next_release(rtos_task_t* task, uint32_t now);
 

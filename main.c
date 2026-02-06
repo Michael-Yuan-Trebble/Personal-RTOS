@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "include/scheduler.h"
+#include "include/tasks.h"
 #include <stdbool.h>
 #include <windows.h>
+#include "taskA.h"
 
 volatile bool rtos_running = true;
 
 static DWORD WINAPI rtos_thread(LPVOID arg) {
+	create_tasks();
 	while (rtos_running) {
 		schedule();
 		Sleep(100);

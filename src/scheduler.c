@@ -1,10 +1,13 @@
 #include "../include/scheduler.h"
 #include <time.h>
 #include <stdio.h>
-#include "time.h"
+#include "../mutex.h"
 #include "../include/cpu.h"
+#include "../taskA.h"
 
 #define MAX_TASKS 16
+rtos_task_t* current_task = NULL;
+mutex_t m;
 
 // Currently Static, check actual RTOS implementation if it remains static or is dynamic
 rtos_task_t tasks[MAX_TASKS];
@@ -14,6 +17,18 @@ int task_count = 0;
 bool scheduler_init(void) {
 	init_time();
 	return true;
+}
+
+void create_tasks(void) {
+	mutex_init(&m);
+	rtos_task_t* t = &tasks[task_count++];
+	t->task_fn = taskA;
+	t->arg = NULL;
+	t->priority = 2;
+	t->base_priority = 2;
+	t->state = TASK_READY;
+	t->next_release = 0;
+	tasks_ready[0] = true;
 }
 
 // Add task to the first index that is available, return true if can
@@ -49,15 +64,20 @@ rtos_task_t* pick_next_task(void) {
 void schedule()
 {
 	uint32_t now = get_system_time_ms();
-	printf("now: %lu\n", now);
+	//printf("now: %lu\n", now);
 	uint32_t time = get_system_time_ms();
 	rtos_task_t* execute = pick_next_task();
 
 	if (execute != NULL) {
+		current_task = execute;
 		execute->task_fn(execute->arg);
 		task_set_next_release(execute, time);
 	}
 	else {
 		cpu_halt();
 	}
+}
+
+rtos_task_t* get_current_task(void) {
+	return current_task;
 }

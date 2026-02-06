@@ -1,4 +1,5 @@
 #include "../include/cpu.h"
+#include <Windows.h>
 
 extern uint64_t asm_read_tsc(void);
 extern uint64_t asm_get_sp(void);
@@ -13,5 +14,6 @@ uint64_t cpu_get_sp(void) {
 }
 
 void cpu_halt(void) {
-	asm_halt();
+	//asm_halt();
+	Sleep(1);
 }
